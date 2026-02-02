@@ -1,0 +1,396 @@
+/* --- CSS CHO TRANG CHẤM CÔNG (STYLE ĐẬM ĐÀ & GỌN) --- */
+.attendance-page-container {
+  --primary: #4f46e5;       /* Indigo đậm */
+  --primary-bg: #e0e7ff;    /* Indigo nhạt */
+  --bg-page: #f8fafc;       /* Nền sáng sủa hơn */
+  --bg-panel: #ffffff;
+  --text-main: #0f172a;     /* Đen xanh đậm (Slate 900) */
+  --text-sub: #64748b;      /* Xám trung tính (Slate 500) */
+  --border: #e2e8f0;        /* Viền xám nhạt */
+  --success: #10b981;       /* Emerald 500 */
+  --danger: #ef4444;        /* Red 500 */
+  --radius: 16px;           /* Bo góc mềm hơn */
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-page);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- HEADER HIỆN ĐẠI (Đã căn giữa hợp lý) --- */
+.page-header {
+  background-color: #fff;
+  padding: 1.25rem 2rem;
+  
+  /* SETUP ĐỂ CHO HẾT VÀO GIỮA */
+  max-width: 1200px;          /* Giới hạn chiều rộng bằng với content */
+  width: calc(100% - 2rem);   /* Đảm bảo có khoảng cách lề trên mobile */
+  margin: 1.5rem auto 2rem auto; /* Căn giữa màn hình (auto) và cách lề trên dưới */
+  box-sizing: border-box;
+
+  /* Tạo khối hộp đẹp mắt (Card style) thay vì full width */
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--primary); /* Điểm nhấn màu trên cùng */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); /* Bóng đổ nổi bật hơn chút */
+  
+  /* Flexbox căn chỉnh nội dung bên trong */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; 
+  gap: 1rem;
+}
+
+/* Hỗ trợ container inner nếu có, hoặc bỏ qua nếu không có */
+.header-inner {
+  display: contents;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.back-link {
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  transition: all 0.2s ease;
+  padding: 4px 0;
+}
+
+.back-link:hover {
+  color: var(--primary);
+  transform: translateX(-3px); /* Hiệu ứng lùi nhẹ khi hover */
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--text-main);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+/* Phần hiển thị ngày tháng bên phải */
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.header-right .date-badge {
+  background: #ffffff;
+  color: var(--primary);
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  border: 1px solid var(--primary-bg);
+  /* Hiệu ứng nổi nhẹ */
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1); 
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.header-right .date-badge span.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.header-right .date-badge span.value {
+  color: var(--text-main);
+  font-family: 'Consolas', monospace; /* Font số đẹp hơn */
+}
+
+/* --- MAIN CONTENT --- */
+.page-content {
+  padding: 0 0 3rem 0; /* Bỏ padding ngang vì container ngoài đã căn giữa */
+  max-width: 1200px;
+  margin: 0 auto;
+  width: calc(100% - 2rem); /* Đồng bộ width với header */
+  box-sizing: border-box;
+}
+
+.alert-box {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-card);
+  animation: fadeIn 0.3s ease;
+}
+.alert-box.success { background-color: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+.alert-box.error { background-color: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+
+/* --- GRID LAYOUT --- */
+.content-grid {
+  display: grid;
+  /* Cột trái 360px, Cột phải tự giãn */
+  grid-template-columns: 360px 1fr; 
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* --- PANEL STYLE --- */
+.section-panel {
+  background: var(--bg-panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  background: linear-gradient(to right, #f8fafc, #ffffff);
+  color: var(--text-main);
+  padding: 1rem 1.25rem;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- CARD LIST (CA LÀM VIỆC) --- */
+.assignment-panel {
+  position: sticky;
+  top: 1rem; /* Giữ panel này khi cuộn trang */
+}
+
+.card-list {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #fff;
+}
+
+/* Thẻ Shift Card */
+.shift-card {
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--primary);
+  border-radius: 12px;
+  padding: 1.25rem;
+  background: #fff;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.shift-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.shift-info h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.time-range {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  font-weight: 500;
+  margin: 0 0 1.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.shift-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn {
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:hover { opacity: 0.95; transform: scale(1.02); }
+
+.btn-checkin {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+}
+
+.btn-checkout {
+  background: #fff;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+.btn-checkout:hover {
+  background-color: #fef2f2;
+}
+
+/* Empty state */
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--text-sub);
+  font-size: 0.95rem;
+  background-color: #f9fafb;
+}
+
+/* --- TABLE LỊCH SỬ --- */
+.history-panel {
+  min-height: 400px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.compact-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.compact-table th {
+  background: #f8fafc;
+  text-align: left;
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.compact-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: var(--text-main);
+  vertical-align: middle;
+}
+
+.compact-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* Columns */
+.col-date { font-weight: 600; color: var(--text-main); }
+.col-shift { color: var(--text-sub); font-weight: 500; }
+.col-time { font-family: 'Consolas', monospace; font-weight: 600; }
+.col-time.in { color: var(--success); }
+.col-time.out { color: var(--danger); }
+
+/* Badges - Xử lý map tiếng Anh sang tiếng Việt */
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  
+  /* Ẩn text gốc (ví dụ: 'on_time') để thay bằng Tiếng Việt */
+  font-size: 0; 
+  min-width: 90px;
+  height: 24px;
+}
+
+/* Sử dụng ::after để hiện text Tiếng Việt */
+.status-tag::after {
+  font-size: 0.75rem; /* Khôi phục size chữ */
+  text-transform: capitalize;
+}
+
+/* 1. CHECKED_IN */
+.status-tag.checked_in { background: #dbeafe; }
+.status-tag.checked_in::after { content: "Đang làm việc"; color: #1e40af; }
+
+/* 2. ON_TIME */
+.status-tag.on_time { background: #d1fae5; }
+.status-tag.on_time::after { content: "Đúng giờ"; color: #065f46; }
+
+/* 3. LATE */
+.status-tag.late { background: #fee2e2; }
+.status-tag.late::after { content: "Đi muộn"; color: #991b1b; }
+
+/* 4. EARLY_LEAVE */
+.status-tag.early_leave { background: #ffedd5; }
+.status-tag.early_leave::after { content: "Về sớm"; color: #9a3412; }
+
+/* 5. INVALID */
+.status-tag.invalid { background: #f3f4f6; }
+.status-tag.invalid::after { content: "Không hợp lệ"; color: #374151; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .assignment-panel {
+    position: static; /* Tắt sticky trên mobile */
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    width: calc(100% - 2rem);
+    margin: 1rem auto;
+  }
+  
+  .header-right {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .header-right .date-badge {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
