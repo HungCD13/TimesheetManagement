@@ -1,0 +1,278 @@
+/* --- CSS CHO TRANG SHIFT MANAGER (STYLE ĐỒNG BỘ) --- */
+.page-container {
+  --primary: #4f46e5;       /* Indigo đậm */
+  --primary-bg: #e0e7ff;    /* Indigo nhạt */
+  --purple-accent: #8b5cf6; /* Purple 500 (Màu chủ đạo cho trang Quản lý) */
+  --bg-page: #f8fafc;       /* Nền sáng */
+  --bg-panel: #ffffff;
+  --text-main: #0f172a;     /* Slate 900 */
+  --text-sub: #64748b;      /* Slate 500 */
+  --border: #e2e8f0;        /* Viền xám nhạt */
+  --radius: 16px;           /* Bo góc mềm */
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-page);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- HEADER --- */
+.page-header {
+  background-color: #fff;
+  padding: 1.25rem 2rem;
+  max-width: 1200px;
+  width: calc(100% - 2rem);
+  margin: 1.5rem auto 2rem auto;
+  box-sizing: border-box;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--purple-accent); /* Màu tím cho trang Admin */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.back-link {
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  transition: all 0.2s ease;
+}
+
+.back-link:hover {
+  color: var(--purple-accent);
+  transform: translateX(-3px);
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--text-main);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.badge-admin {
+    background: #f3e8ff;
+    color: #7e22ce;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid #d8b4fe;
+}
+
+/* --- MAIN CONTENT --- */
+.page-content {
+  padding: 0 0 3rem 0;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: calc(100% - 2rem);
+  box-sizing: border-box;
+}
+
+/* --- FORM PANEL --- */
+.section-panel {
+  background: var(--bg-panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  margin-bottom: 2.5rem;
+}
+
+.section-title {
+  background: linear-gradient(to right, #f8fafc, #ffffff);
+  color: var(--text-main);
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.panel-body {
+    padding: 2rem;
+}
+
+.shift-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr; /* Tên ca rộng hơn */
+    gap: 1.5rem;
+    align-items: end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-sub);
+    text-transform: uppercase;
+}
+
+.form-control {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    background-color: #fff;
+    transition: all 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--purple-accent);
+    box-shadow: 0 0 0 4px #f3e8ff;
+}
+
+.btn-submit {
+    padding: 0.75rem 2rem;
+    background-color: var(--purple-accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(139, 92, 246, 0.25);
+}
+
+.btn-submit:hover {
+    background-color: #7c3aed;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(139, 92, 246, 0.35);
+}
+
+/* --- LIST SECTION --- */
+.list-title {
+    font-size: 1.25rem;
+    color: var(--text-main);
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid var(--purple-accent);
+    line-height: 1.2;
+}
+
+.shifts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+/* --- CARD ADMIN STYLE --- */
+.shift-card-admin {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.shift-card-admin:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
+    border-color: #d8b4fe;
+}
+
+.card-header-admin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header-admin h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.headcount-badge {
+    background: #f1f5f9;
+    color: var(--text-sub);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.card-body-admin {
+    background: #faf5ff; /* Tím rất nhạt */
+    padding: 0.75rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+}
+
+.time-row {
+    font-family: 'Consolas', monospace;
+    font-weight: 700;
+    color: #6b21a8; /* Tím đậm */
+    font-size: 1.1rem;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.time-row .arrow {
+    color: #d8b4fe;
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr 1fr; /* Tablet: 2 cột */
+    }
+}
+
+@media (max-width: 480px) {
+    .form-grid {
+        grid-template-columns: 1fr; /* Mobile: 1 cột */
+    }
+}

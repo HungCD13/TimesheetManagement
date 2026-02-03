@@ -11,6 +11,7 @@ import ShiftManager from './pages/ShiftManager';
 import AssignmentManager from './pages/AssignmentManager';
 import SchedulePage from './pages/SchedulePage';
 import PayrollPage from './pages/PayrollPage';
+import AlertPage from './pages/AlertPage';
 import './App.css'; // Import CSS
 
 function App() {
@@ -47,7 +48,11 @@ function App() {
               <ShiftManager />
             </PrivateRoute>
           } />
-
+          <Route path="/alerts" element={
+            <PrivateRoute roles={['admin']}>
+              <AlertPage />
+            </PrivateRoute>
+          } />
           
           <Route path="/payroll" element={
   <PrivateRoute roles={['admin']}>

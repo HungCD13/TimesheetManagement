@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../api/axiosClient';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
+import '../css/AssignmentManager.css';
 
 const AssignmentManager = () => {
   const [employees, setEmployees] = useState([]);
@@ -60,60 +62,81 @@ const AssignmentManager = () => {
 
   return (
     <div className="page-container">
-      <h2>📋 Quản lý Phân Ca (Gán ca cho nhân viên)</h2>
-      
-      {message && <div className={`alert-box ${message.includes('❌') ? 'error' : 'success'}`}>{message}</div>}
+      {/* Header đồng bộ với AttendancePage */}
+      <header className="page-header">
+        <div className="header-left">
+          <Link to="/" className="back-link">
+            <span className="arrow">←</span> Trở về Dashboard
+          </Link>
+          <h2 className="page-title">Quản lý Phân Ca</h2>
+        </div>
+      </header>
 
-      <div className="form-section card-box">
-        <form onSubmit={handleAssign} className="assignment-form">
-          
-          <div className="form-group">
-            <label>1. Chọn Nhân Viên:</label>
-            <select 
-              value={selectedUser} 
-              onChange={(e) => setSelectedUser(e.target.value)}
-              className="form-control"
-            >
-              {employees.map(emp => (
-                <option key={emp._id} value={emp._id}>
-                  {emp.username} ({emp.role})
-                </option>
-              ))}
-            </select>
-          </div>
+      <div className="page-content">
+        {message && <div className={`alert-box ${message.includes('❌') ? 'error' : 'success'}`}>{message}</div>}
 
-          <div className="form-group">
-            <label>2. Chọn Ca Làm Việc:</label>
-            <select 
-              value={selectedShift} 
-              onChange={(e) => setSelectedShift(e.target.value)}
-              className="form-control"
-            >
-              {shifts.map(shift => (
-                <option key={shift._id} value={shift._id}>
-                  {shift.name} ({shift.startTime} - {shift.endTime})
-                </option>
-              ))}
-            </select>
-          </div>
+        <div className="section-panel form-panel">
+            <div className="section-title">
+                <span>📝 Thông tin phân công</span>
+            </div>
+            
+            <div className="panel-body">
+                <form onSubmit={handleAssign} className="assignment-form">
+                
+                <div className="form-group">
+                    <label>1. Chọn Nhân Viên</label>
+                    <div className="select-wrapper">
+                        <select 
+                        value={selectedUser} 
+                        onChange={(e) => setSelectedUser(e.target.value)}
+                        className="form-control"
+                        >
+                        {employees.map(emp => (
+                            <option key={emp._id} value={emp._id}>
+                            {emp.username} ({emp.role})
+                            </option>
+                        ))}
+                        </select>
+                    </div>
+                </div>
 
-          <div className="form-group">
-            <label>3. Chọn Ngày:</label>
-            <input 
-              type="date" 
-              value={date} 
-              onChange={(e) => setDate(e.target.value)}
-              className="form-control"
-            />
-          </div>
+                <div className="form-group">
+                    <label>2. Chọn Ca Làm Việc</label>
+                    <div className="select-wrapper">
+                        <select 
+                        value={selectedShift} 
+                        onChange={(e) => setSelectedShift(e.target.value)}
+                        className="form-control"
+                        >
+                        {shifts.map(shift => (
+                            <option key={shift._id} value={shift._id}>
+                            {shift.name} ({shift.startTime} - {shift.endTime})
+                            </option>
+                        ))}
+                        </select>
+                    </div>
+                </div>
 
-          <button type="submit" className="btn-primary mt-3">💾 Lưu Phân Ca</button>
-        </form>
-      </div>
+                <div className="form-group">
+                    <label>3. Chọn Ngày</label>
+                    <input 
+                    type="date" 
+                    value={date} 
+                    onChange={(e) => setDate(e.target.value)}
+                    className="form-control"
+                    />
+                </div>
 
-      <div className="tutorial-box mt-4">
-        <h4>ℹ️ Hướng dẫn:</h4>
-        <p>Chọn nhân viên và ca làm việc tương ứng cho ngày cụ thể. Sau khi gán, nhân viên sẽ thấy lịch làm việc của họ trên trang Dashboard.</p>
+                <div className="form-actions">
+                    <button type="submit" className="btn-primary">
+                         Lưu Phân Ca
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+        
+        
       </div>
     </div>
   );

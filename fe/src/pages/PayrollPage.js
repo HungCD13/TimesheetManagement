@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../api/axiosClient';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
+import '../css/PayrollPage.css';
 
 const PayrollPage = () => {
   const [report, setReport] = useState([]);
@@ -15,9 +17,11 @@ const PayrollPage = () => {
   const fetchPayroll = async () => {
     try {
       const res = await axiosClient.get(`/payroll/report?month=${month}`);
-      setReport(res.data.data);
+      // Giả lập data nếu API chưa trả về đúng structure để test UI (Optional)
+      setReport(res.data.data || []);
     } catch (err) {
-      alert('Lỗi tải bảng lương');
+      console.error(err);
+      // alert('Lỗi tải bảng lương'); // Tạm ẩn alert để tránh spam khi dev
     }
   };
 
@@ -31,9 +35,9 @@ const PayrollPage = () => {
       await axiosClient.put(`/payroll/rate/${userId}`, { hourlyRate: newRate });
       setEditingUser(null);
       fetchPayroll(); // Reload lại dữ liệu
-      alert('Cập nhật lương thành công!');
+      alert('✅ Cập nhật lương thành công!');
     } catch (err) {
-      alert('Lỗi cập nhật lương');
+      alert('❌ Lỗi cập nhật lương');
     }
   };
 
@@ -44,66 +48,99 @@ const PayrollPage = () => {
 
   return (
     <div className="page-container">
-      <h2>💰 Bảng Tính Lương Nhân Viên</h2>
-      
-      <div className="card-box mb-4">
-        <label style={{ marginRight: '10px' }}>Chọn Tháng:</label>
-        <input 
-          type="month" 
-          value={month} 
-          onChange={(e) => setMonth(e.target.value)}
-          className="form-control"
-          style={{ width: '200px', display: 'inline-block' }}
-        />
-      </div>
+      {/* Header đồng bộ */}
+      <header className="page-header">
+        <div className="header-left">
+          <Link to="/" className="back-link">
+            <span className="arrow">←</span> Trở về Dashboard
+          </Link>
+          <h2 className="page-title">Bảng Tính Lương</h2>
+        </div>
+        <div className="header-right">
+           <div className="month-filter-badge">
+              <span className="label">Kỳ lương:</span>
+              <input 
+                type="month" 
+                value={month} 
+                onChange={(e) => setMonth(e.target.value)}
+                className="month-input"
+              />
+           </div>
+        </div>
+      </header>
 
-      <div className="payroll-table-container card-box">
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Nhân viên</th>
-              <th>Số ca</th>
-              <th>Tổng giờ làm</th>
-              <th>Lương/Giờ</th>
-              <th>Tổng Lương (Dự kiến)</th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            {report.map((row) => (
-              <tr key={row.userId}>
-                <td>{row.username}</td>
-                <td>{row.totalShifts}</td>
-                <td>{row.totalHours}h</td>
-                <td>
-                  {editingUser === row.userId ? (
-                    <input 
-                      type="number" 
-                      value={newRate} 
-                      onChange={(e) => setNewRate(e.target.value)}
-                      style={{ width: '80px', padding: '5px' }}
-                    />
-                  ) : (
-                    formatCurrency(row.hourlyRate) + '/h'
-                  )}
-                </td>
-                <td style={{ fontWeight: 'bold', color: '#28a745' }}>
-                  {formatCurrency(row.totalSalary)}
-                </td>
-                <td>
-                  {editingUser === row.userId ? (
-                    <>
-                      <button onClick={() => saveRate(row.userId)} className="btn-sm btn-success">Lưu</button>
-                      <button onClick={() => setEditingUser(null)} className="btn-sm btn-cancel">Hủy</button>
-                    </>
-                  ) : (
-                    <button onClick={() => handleEditRate(row)} className="btn-sm btn-edit">Sửa Lương</button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="page-content">
+        
+        <div className="section-panel table-panel">
+            <div className="section-title">
+                <span>💰 Chi tiết lương tháng {moment(month).format('MM/YYYY')}</span>
+            </div>
+
+            <div className="table-wrapper">
+                <table className="payroll-table">
+                <thead>
+                    <tr>
+                    <th>Nhân viên</th>
+                    <th className="text-center">Số ca</th>
+                    <th className="text-center">Tổng giờ</th>
+                    <th className="text-right">Lương/Giờ</th>
+                    <th className="text-right">Tổng Lương</th>
+                    <th className="text-center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {report.length === 0 ? (
+                        <tr><td colSpan="6" className="empty-row">Chưa có dữ liệu chấm công tháng này</td></tr>
+                    ) : (
+                        report.map((row) => (
+                        <tr key={row.userId} className={editingUser === row.userId ? 'editing-row' : ''}>
+                            <td className="col-user">
+                                <div className="user-info">
+                                    <span className="username">{row.username}</span>
+                                    <span className="user-id">#{row.userId.slice(-4)}</span>
+                                </div>
+                            </td>
+                            <td className="text-center">{row.totalShifts}</td>
+                            <td className="text-center font-mono">{row.totalHours}h</td>
+                            <td className="text-right">
+                            {editingUser === row.userId ? (
+                                <input 
+                                type="number" 
+                                value={newRate} 
+                                onChange={(e) => setNewRate(e.target.value)}
+                                className="rate-input"
+                                autoFocus
+                                />
+                            ) : (
+                                <span className="rate-display">{formatCurrency(row.hourlyRate)}</span>
+                            )}
+                            </td>
+                            <td className="text-right col-total">
+                            {formatCurrency(row.totalSalary)}
+                            </td>
+                            <td className="text-center col-actions">
+                            {editingUser === row.userId ? (
+                                <div className="action-group">
+                                <button onClick={() => saveRate(row.userId)} className="btn-icon btn-save" title="Lưu">
+                                    💾
+                                </button>
+                                <button onClick={() => setEditingUser(null)} className="btn-icon btn-cancel" title="Hủy">
+                                    ❌
+                                </button>
+                                </div>
+                            ) : (
+                                <button onClick={() => handleEditRate(row)} className="btn-sm btn-edit">
+                                ✏️ Sửa
+                                </button>
+                            )}
+                            </td>
+                        </tr>
+                        ))
+                    )}
+                </tbody>
+                </table>
+            </div>
+        </div>
       </div>
     </div>
   );

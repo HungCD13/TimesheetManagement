@@ -1,0 +1,353 @@
+/* --- CSS CHO TRANG LỊCH LÀM VIỆC (STYLE ĐỒNG BỘ) --- */
+.page-container {
+  --primary: #4f46e5;       /* Indigo đậm */
+  --primary-bg: #e0e7ff;    /* Indigo nhạt */
+  --blue-accent: #3b82f6;   /* Blue 500 (Màu chủ đạo cho trang Lịch) */
+  --blue-light: #eff6ff;    /* Blue 50 */
+  --bg-page: #f8fafc;       /* Nền sáng */
+  --bg-panel: #ffffff;
+  --text-main: #0f172a;     /* Slate 900 */
+  --text-sub: #64748b;      /* Slate 500 */
+  --border: #e2e8f0;        /* Viền xám nhạt */
+  --radius: 16px;           /* Bo góc mềm */
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-page);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- HEADER (Floating Card Style) --- */
+.page-header {
+  background-color: #fff;
+  padding: 1.25rem 2rem;
+  max-width: 1200px;
+  width: calc(100% - 2rem);
+  margin: 1.5rem auto 2rem auto;
+  box-sizing: border-box;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--blue-accent); /* Màu Xanh dương cho trang Schedule */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.back-link {
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  transition: all 0.2s ease;
+}
+
+.back-link:hover {
+  color: var(--blue-accent);
+  transform: translateY(-3px);
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--text-main);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.current-user-badge {
+    font-weight: 600;
+    color: var(--text-sub);
+    background: var(--bg-page);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+/* --- MAIN CONTENT --- */
+.page-content {
+  padding: 0 0 3rem 0;
+  max-width: 800px; /* Nội dung hẹp hơn để tập trung */
+  margin: 0 auto;
+  width: calc(100% - 2rem);
+  box-sizing: border-box;
+}
+
+/* --- DATE NAVIGATOR --- */
+.date-navigator {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    margin-bottom: 2rem;
+}
+
+.nav-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-sub);
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background: var(--blue-light);
+    color: var(--blue-accent);
+    border-color: var(--blue-accent);
+}
+
+.date-display {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.date-display .day-name {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-sub);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.date-display .full-date {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-main);
+    font-family: 'Consolas', monospace;
+}
+
+/* --- SCHEDULE LIST --- */
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* --- SCHEDULE CARD --- */
+.schedule-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    display: flex;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.schedule-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px -5px rgba(59, 130, 246, 0.15);
+    border-color: var(--blue-accent);
+}
+
+/* Cột trái: Thời gian */
+.card-left {
+    background: var(--blue-light);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #dbeafe;
+    min-width: 100px;
+}
+
+.shift-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Consolas', monospace;
+    font-weight: 700;
+    color: var(--blue-accent);
+}
+
+.shift-time .separator {
+    color: #93c5fd;
+    font-size: 0.8rem;
+    margin: 4px 0;
+}
+
+/* Cột giữa: Thông tin */
+.card-center {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-center h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-main);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.card-meta {
+    display: flex;
+    gap: 10px;
+}
+
+.meta-item {
+    font-size: 0.85rem;
+    color: var(--text-sub);
+    background: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Cột phải: Trạng thái */
+.card-right {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    border-left: 1px dashed var(--border);
+    min-width: 140px;
+}
+
+.status-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-sub);
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+/* --- STATUS BADGE (VIETNAMESE MAPPING - FIXED) --- */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    
+    /* FIX CHỒNG CHỮ: Ẩn text gốc hoàn toàn bằng font-size 0 và màu trong suốt */
+    font-size: 0 !important;
+    color: transparent !important;
+    
+    min-width: 100px;
+    height: 24px;
+    text-align: center;
+}
+
+/* Text Tiếng Việt hiện lại ở pseudo-element */
+.status-badge::after {
+    font-size: 0.85rem;
+    text-transform: capitalize;
+    display: block; /* Đảm bảo hiển thị khối */
+}
+
+/* 1. PENDING (Chưa bắt đầu) */
+.status-badge.pending { background: #f1f5f9; }
+.status-badge.pending::after { content: "Chưa bắt đầu"; color: #64748b; }
+
+/* 2. IN_PROGRESS (Đang làm việc) */
+.status-badge.in_progress { background: #dbeafe; }
+.status-badge.in_progress::after { content: "Đang làm việc"; color: #1e40af; }
+
+/* 3. COMPLETED (Hoàn thành) */
+.status-badge.completed { background: #d1fae5; }
+.status-badge.completed::after { content: "Hoàn thành"; color: #065f46; }
+
+/* 4. ABSENT (Vắng mặt) */
+.status-badge.absent { background: #fee2e2; }
+.status-badge.absent::after { content: "Vắng mặt"; color: #991b1b; }
+
+
+/* --- EMPTY STATE --- */
+.empty-schedule-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #fff;
+    border-radius: var(--radius);
+    border: 2px dashed var(--border);
+    color: var(--text-sub);
+}
+
+.empty-schedule-state .icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-schedule-state p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-main);
+}
+
+.empty-schedule-state .sub-text {
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .schedule-card {
+        flex-direction: column;
+    }
+    
+    .card-left, .card-right {
+        width: 100%;
+        min-width: unset;
+        border: none;
+        padding: 1rem 1.5rem;
+    }
+    
+    .card-left {
+        background: #f8fafc;
+        border-bottom: 1px solid var(--border);
+        flex-direction: row;
+        gap: 10px;
+    }
+    
+    .shift-time {
+        flex-direction: row;
+        gap: 8px;
+    }
+    
+    .shift-time .separator {
+        transform: rotate(-90deg);
+        margin: 0;
+    }
+
+    .card-right {
+        border-top: 1px dashed var(--border);
+        align-items: flex-start;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .status-label { margin-bottom: 0; }
+}
