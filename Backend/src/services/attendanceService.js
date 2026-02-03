@@ -1,0 +1,195 @@
+const Attendance = require('../models/Attendance');
+const Assignment = require('../models/Assignment');
+
+const {
+  parse,
+  addDays,
+  subMinutes,
+  addMinutes,
+  isBefore,
+  isAfter,
+  differenceInMinutes,
+  startOfDay,
+  endOfDay
+} = require('date-fns');
+
+/**
+ * HELPER: Tính thời gian thực tế của ca làm
+ * Hỗ trợ ca qua đêm
+ */
+const getShiftTimings = (shift, assignmentDate) => {
+  let start = parse(shift.startTime, 'HH:mm', assignmentDate);
+  let end = parse(shift.endTime, 'HH:mm', assignmentDate);
+
+  if (isBefore(end, start)) {
+    end = addDays(end, 1);
+  }
+
+  return { start, end };
+};
+
+const checkIn = async (user, assignmentId) => {
+  const now = new Date();
+
+  const assignment = await Assignment.findOne({
+    _id: assignmentId,
+    userId: user._id
+  }).populate('shiftId');
+
+  if (!assignment) {
+    const err = new Error('Assignment not found');
+    err.status = 404;
+    throw err;
+  }
+
+  const existed = await Attendance.findOne({ assignmentId });
+  if (existed) {
+    const err = new Error('Already checked in');
+    err.status = 400;
+    throw err;
+  }
+
+  const { start: shiftStart } = getShiftTimings(
+    assignment.shiftId,
+    assignment.date
+  );
+
+  const allowedStart = subMinutes(shiftStart, 15);
+  const allowedEnd = addMinutes(shiftStart, 30);
+
+  let status = 'checked_in';
+  let note = null;
+
+  if (isBefore(now, allowedStart)) {
+    const err = new Error('Too early to check in');
+    err.status = 400;
+    throw err;
+  }
+
+  if (isAfter(now, allowedEnd)) {
+    status = 'invalid';
+    note = 'Check-in time window expired (Late > 30m)';
+  } else if (isAfter(now, shiftStart)) {
+    status = 'late';
+  } else {
+    status = 'on_time';
+  }
+
+  const attendance = await Attendance.create({
+    userId: user._id,
+    assignmentId,
+    checkIn: now,
+    status,
+    note
+  });
+
+  assignment.status = 'in_progress';
+  await assignment.save();
+
+  return {
+    message:
+      status === 'invalid'
+        ? 'Checked in but INVALID (Late)'
+        : 'Check-in successful',
+    data: attendance
+  };
+};
+
+const checkOut = async (user, assignmentId) => {
+  const now = new Date();
+
+  const attendance = await Attendance.findOne({
+    assignmentId,
+    userId: user._id
+  });
+
+  if (!attendance) {
+    const err = new Error('Attendance record not found (Must check-in first)');
+    err.status = 404;
+    throw err;
+  }
+
+  if (attendance.checkOut) {
+    const err = new Error('Already checked out');
+    err.status = 400;
+    throw err;
+  }
+
+  const assignment = await Assignment.findById(assignmentId)
+    .populate('shiftId');
+
+  const { start, end } = getShiftTimings(
+    assignment.shiftId,
+    assignment.date
+  );
+
+  const workedMinutes = differenceInMinutes(now, attendance.checkIn);
+  const shiftDuration = differenceInMinutes(end, start);
+
+  let overtimeMinutes = 0;
+  if (workedMinutes > shiftDuration) {
+    overtimeMinutes = workedMinutes - shiftDuration;
+  }
+
+  attendance.checkOut = now;
+  attendance.workedMinutes = workedMinutes;
+  attendance.overtimeMinutes = overtimeMinutes;
+
+  if (attendance.status === 'on_time' && isBefore(now, end)) {
+    attendance.status = 'early_leave';
+  }
+
+  await attendance.save();
+
+  assignment.status = 'completed';
+  await assignment.save();
+
+  return {
+    message: 'Check-out successful',
+    workedMinutes,
+    overtimeMinutes,
+    status: attendance.status
+  };
+};
+
+const getMyAttendance = async (user) => {
+  return Attendance.find({ userId: user._id })
+    .populate({
+      path: 'assignmentId',
+      populate: {
+        path: 'shiftId',
+        select: 'name startTime endTime'
+      }
+    })
+    .sort({ createdAt: -1 });
+};
+
+const getAllAttendance = async ({ user_id, from, to }) => {
+  const query = {};
+
+  if (user_id) {
+    query.userId = user_id;
+  }
+
+  if (from || to) {
+    query.checkIn = {};
+    if (from) query.checkIn.$gte = startOfDay(new Date(from));
+    if (to) query.checkIn.$lte = endOfDay(new Date(to));
+  }
+
+  return Attendance.find(query)
+    .populate('userId', 'username')
+    .populate({
+      path: 'assignmentId',
+      populate: { path: 'shiftId', select: 'name' }
+    })
+    .sort({ checkIn: -1 });
+};
+
+module.exports = {
+  checkIn,
+  checkOut,
+  getMyAttendance,
+  getAllAttendance
+};
+
