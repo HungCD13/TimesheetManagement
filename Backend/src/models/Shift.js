@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const shiftSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // Ví dụ: "Ca Sáng", "Ca Đêm"
-  startTime: { type: String, required: true }, // Format: "HH:mm" (22:00)
-  endTime: { type: String, required: true },   // Format: "HH:mm" (06:00)
+  name: { type: String, required: true },
+  startTime: { type: String, required: true }, 
+  endTime: { type: String, required: true },   
   requiredHeadcount: { type: Number, default: 1 }
 }, { timestamps: true });
 

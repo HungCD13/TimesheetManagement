@@ -67,7 +67,6 @@
 
 const AssignmentService = require('../services/assignmentService');
 
-// @route POST /api/assignments
 const createAssignment = async (req, res) => {
   try {
     const assignment = await AssignmentService.createAssignment(req.body);
@@ -77,7 +76,6 @@ const createAssignment = async (req, res) => {
   }
 };
 
-// @route GET /api/assignments?date=YYYY-MM-DD
 const getAssignments = async (req, res) => {
   try {
     const assignments = await AssignmentService.getAssignments(

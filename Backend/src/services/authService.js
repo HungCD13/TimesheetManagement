@@ -17,7 +17,7 @@ const registerUser = async ({
 
   const userExists = await User.findOne({ username });
   if (userExists) {
-    const err = new Error('User already exists');
+    const err = new Error('User đã tồn tại');
     err.status = 400;
     throw err;
   }

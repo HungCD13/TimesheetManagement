@@ -1,6 +1,5 @@
 const UserService = require('../services/userService');
 
-// GET /api/users
 const getAllEmployees = async (req, res) => {
   try {
     const users = await UserService.getAllEmployees();
@@ -10,7 +9,6 @@ const getAllEmployees = async (req, res) => {
   }
 };
 
-// PUT /api/users/:id
 const updateUser = async (req, res) => {
   try {
     const updatedUser = await UserService.updateUser(req.params.id, req.body);
@@ -21,7 +19,6 @@ const updateUser = async (req, res) => {
   }
 };
 
-// DELETE /api/users/:id
 const deleteUser = async (req, res) => {
   try {
     const result = await UserService.deleteUser(req.params.id);

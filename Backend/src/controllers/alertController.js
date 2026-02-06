@@ -123,9 +123,6 @@
 
 const AlertService = require('../services/alertService');
 
-// @desc    Admin xem danh sách nhân viên đi muộn trong tháng
-// @route   GET /api/alerts/late?month=YYYY-MM
-// @access  Admin
 const getLateAlerts = async (req, res) => {
   try {
     const { month } = req.query;
