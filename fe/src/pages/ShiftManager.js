@@ -33,6 +33,18 @@ const ShiftManager = () => {
       alert('❌ Lỗi: ' + (err.response?.data?.message || 'Không thể tạo ca'));
     }
   };
+  const handleDelete = async (shiftId) => {
+    if (window.confirm('⚠️ Bạn có chắc chắn muốn xóa ca làm việc này không? Hành động này không thể hoàn tác.')) {
+      try {
+        await axiosClient.delete(`/shifts/${shiftId}`);
+        alert('🗑️ Đã xóa ca thành công!');
+        setShifts(prevShifts => prevShifts.filter(shift => shift._id !== shiftId));
+      } catch (err) {
+        console.error(err);
+        alert('❌ Lỗi khi xóa: ' + (err.response?.data?.message || 'Server Error'));
+      }
+    }
+  };
 
   return (
     <div className="page-container">
@@ -126,6 +138,14 @@ const ShiftManager = () => {
                                 <span className="arrow">➝</span>
                                 <span className="time-val">{shift.endTime}</span>
                             </div>
+                        </div>
+                        <div className="card-footer-admin">
+                            <button 
+                                className="btn-delete"
+                                onClick={() => handleDelete(shift._id)}
+                            >
+                                🗑 Xóa ca
+                            </button>
                         </div>
                         {/* Có thể thêm nút sửa/xóa ở đây nếu cần */}
                     </div>

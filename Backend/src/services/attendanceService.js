@@ -184,18 +184,43 @@ const checkOut = async (user, assignmentId) => {
     assignment.shiftId,
     assignment.date
   );
-
+// Chặn quên checkout
+const maxCheckOutTime = addMinutes(end, 240);
+if( isAfter(now, maxCheckOutTime)) {
+  const err = new Error('Check-out time window expired, please submit a manual request');
+  err.status = 400;
+  throw err;
+}
+// Tính toán thời gian thực tế
   const workedMinutes = differenceInMinutes(now, attendance.checkIn);
   const shiftDuration = differenceInMinutes(end, start);
-
+  const breakTime = shiftDuration >= 300 ? 60 : 0;
+  let netWorkedMinutes = workedMinutes - breakTime;
+  if (netWorkedMinutes < 0) netWorkedMinutes = 0;
+// Tính overTime 
   let overtimeMinutes = 0;
-  if (workedMinutes > shiftDuration) {
-    overtimeMinutes = workedMinutes - shiftDuration;
+  if (isAfter(now, end)) {
+    overtimeMinutes = differenceInMinutes(now, end);
+    if (overtimeMinutes < 30) overtimeMinutes = 0;
   }
+// Xử lí trạng thái
+let status = attendance.status;
+let note = attendance.note || '';
+const allowedCheckOutStart = subMinutes(end, 15);
+if( isBefore(now, allowedCheckOutStart)) {
+  if (status == 'late') {
+    status = 'late_early_leave';
+    note += ' | Left early';
+  }else if (status == 'on_time') {
+    status = 'early_leave';
+}
+}
 
   attendance.checkOut = now;
   attendance.workedMinutes = workedMinutes;
+  attendance.netWorkedMinutes = netWorkedMinutes;
   attendance.overtimeMinutes = overtimeMinutes;
+  attendance.status = status;
 
   if (attendance.status === 'on_time' && isBefore(now, end)) {
     attendance.status = 'early_leave';
