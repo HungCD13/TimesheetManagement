@@ -57,6 +57,10 @@ const Dashboard = () => {
                 <h3>💰 Tính Lương</h3>
                 <p>Xem bảng lương & chỉnh sửa</p>
               </Link>
+              <Link to="/users" className="menu-card admin">
+                <h3>Taạo nhaân vieên</h3>
+                <p>Quản lý tài khoản người dùng</p>
+              </Link>
               <Link to="/alerts" className="menu-card admin">
                 <h3>⚠️ Cảnh báo</h3>
                 <p>Nhân viên đi muộn/vắng</p>
