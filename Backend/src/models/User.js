@@ -4,12 +4,14 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  fullname: { type: String, required: true },
+  bank: { type: String, default: '' },
   role: { 
     type: String, 
     enum: ['admin', 'manager', 'employee'], 
     default: 'employee' 
   },
-  hourlyRate: { type: Number, default: 25000 }, // Mức lương theo giờ cho nhân viên
+  hourlyRate: { type: Number, default: 25000 }, 
 }, { timestamps: true });
 
 // Hash password trước khi lưu
@@ -20,7 +22,7 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// Method kiểm tra password
+//ktra paáas
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

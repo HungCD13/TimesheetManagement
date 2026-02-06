@@ -9,6 +9,9 @@ dotenv.config();
 // Connect Database
 connectDB();
 
+require('./cron/autoCheckoutJob');
+
+
 const app = express();
 
 // Middleware

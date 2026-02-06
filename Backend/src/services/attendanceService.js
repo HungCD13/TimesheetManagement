@@ -28,6 +28,68 @@ const getShiftTimings = (shift, assignmentDate) => {
   return { start, end };
 };
 
+const autoCheckoutExpired = async () => {
+  const now = new Date();
+
+  // 1. Lấy tất cả attendance chưa checkout
+  const attendances = await Attendance.find({
+    checkOut: null,
+    status: { $ne: 'invalid' }
+  }).populate({
+    path: 'assignmentId',
+    populate: { path: 'shiftId' }
+  });
+
+  const updatedList = [];
+
+  for (const att of attendances) {
+    const assignment = att.assignmentId;
+    if (!assignment) continue;
+
+    const { end: shiftEnd } = getShiftTimings(
+      assignment.shiftId,
+      assignment.date
+    );
+
+    // Hết ca + 1h
+    const autoCheckoutTime = addHours(shiftEnd, 1);
+
+    if (isBefore(autoCheckoutTime, now)) {
+      const workedMinutes = differenceInMinutes(
+        autoCheckoutTime,
+        att.checkIn
+      );
+
+      const shiftDuration = differenceInMinutes(
+        shiftEnd,
+        getShiftTimings(assignment.shiftId, assignment.date).start
+      );
+
+      let overtimeMinutes = 0;
+      if (workedMinutes > shiftDuration) {
+        overtimeMinutes = workedMinutes - shiftDuration;
+      }
+
+      att.checkOut = autoCheckoutTime;
+      att.workedMinutes = workedMinutes;
+      att.overtimeMinutes = overtimeMinutes;
+
+      if (att.status === 'on_time') {
+        att.status = 'auto_checked_out';
+      }
+
+      await att.save();
+
+      assignment.status = 'completed';
+      await assignment.save();
+
+      updatedList.push(att);
+    }
+  }
+
+  return updatedList;
+};
+
 const checkIn = async (user, assignmentId) => {
   const now = new Date();
 
@@ -187,6 +249,7 @@ const getAllAttendance = async ({ user_id, from, to }) => {
 };
 
 module.exports = {
+  autoCheckoutExpired,
   checkIn,
   checkOut,
   getMyAttendance,

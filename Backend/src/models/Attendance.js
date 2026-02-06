@@ -5,6 +5,10 @@ const attendanceSchema = new mongoose.Schema({
   assignmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Assignment', required: true },
   checkIn: { type: Date },
   checkOut: { type: Date },
+  shiftStart: { type: Date },
+  shiftEnd: { type: Date },
+  autoCheckedOut: { type: Boolean, default: false },
+
   status: { 
     type: String, 
     enum: ['on_time', 'late', 'early_leave', 'invalid', 'checked_in'], 

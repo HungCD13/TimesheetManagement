@@ -3,11 +3,18 @@ const jwt = require('jsonwebtoken');
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '1d'
+    expiresIn: '1h'
   });
 };
 
-const registerUser = async ({ username, password, role }) => {
+const registerUser = async ({ 
+  username, 
+  password, 
+  role, 
+  fullname, 
+  bank 
+}) => {
+
   const userExists = await User.findOne({ username });
   if (userExists) {
     const err = new Error('User already exists');
@@ -18,16 +25,21 @@ const registerUser = async ({ username, password, role }) => {
   const user = await User.create({
     username,
     password,
-    role: role || 'employee'
+    role: role || 'employee',
+    fullname,
+    bank
   });
 
   return {
     _id: user._id,
     username: user.username,
+    fullname: user.fullname,
+    bank: user.bank,
     role: user.role,
     token: generateToken(user._id)
   };
 };
+
 
 const loginUser = async ({ username, password }) => {
   const user = await User.findOne({ username });
